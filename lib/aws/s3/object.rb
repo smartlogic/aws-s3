@@ -179,13 +179,15 @@ module AWS
         end
         
         # Makes a copy of the object with <tt>key</tt> to <tt>copy_key</tt>, preserving the ACL of the existing object if the <tt>:copy_acl</tt> option is true (default false).
+        # You can make a copy from a different bucket by specifying the <tt>:target_bucket</tt> option (default to the same bucket à destination)
         def copy(key, copy_key, bucket = nil, options = {})
-          bucket          = bucket_name(bucket)
-          source_key      = path!(bucket, key)
+          source_bucket   = bucket_name(bucket)
+          target_bucket   = bucket_name(options[:target_bucket] || bucket)
+          source_key      = path!(source_bucket, key)
           default_options = {'x-amz-copy-source' => source_key}
-          target_key      = path!(bucket, copy_key)
+          target_key      = path!(target_bucket, copy_key)
           returning put(target_key, default_options) do
-            acl(copy_key, bucket, acl(key, bucket)) if options[:copy_acl]
+            acl(copy_key, target_bucket, acl(key, source_bucket)) if options[:copy_acl]
           end
         end
         
@@ -549,6 +551,7 @@ module AWS
       
       # Copies the current object, given it the name <tt>copy_name</tt>. Keep in mind that due to limitations in 
       # S3's API, this operation requires retransmitting the entire object to S3.
+      # You can make a copy from a different bucket by specifying the <tt>:target_bucket</tt> option (default to the same bucket à destination)
       def copy(copy_name, options = {})
         self.class.copy(key, copy_name, bucket.name, options)
       end
