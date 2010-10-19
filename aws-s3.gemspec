@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
   s.name              = 'aws-s3'
-  s.version           = "0.6.3"
+  s.version           = "0.6.3.1"
   s.summary           = "Fork of Client library for Amazon's Simple Storage Service's REST API"
   s.description       = s.summary
   s.email             = 'marcel@vernix.org'
-  s.author            = 'Marcel Molina Jr.'
+  s.authors           = ['Marcel Molina Jr. (original)', 'David Bourguignon', 'Greg Jastrab', 'Matt Scilipoti']
   s.has_rdoc          = true
   s.extra_rdoc_files  = %w(README COPYING INSTALL)
   s.homepage          = 'http://amazon.rubyforge.org'

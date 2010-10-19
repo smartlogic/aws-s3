@@ -1,5 +1,12 @@
 = AWS::S3
 
+This is a fork from http://github.com/dbourguignon/aws-s3 in order to:
+ * raise an error when a bucket is created with a duplicate name (to match AWS API)
+
+NOTE: build the gem with "rake dist:gem" after updating the version in lib/aws/s3/version.rb
+
+--
+
 AWS::S3 is a Ruby library for Amazon's Simple Storage Service's REST API (http://aws.amazon.com/s3).
 Full documentation of the currently supported API can be found at http://docs.amazonwebservices.com/AmazonS3/2006-03-01.
 
