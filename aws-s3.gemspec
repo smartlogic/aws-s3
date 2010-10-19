@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'xml-simple'
   s.add_dependency 'builder'
   s.add_dependency 'mime-types'
+  s.add_development_dependency 'flexmock'
   s.rdoc_options  = ['--title', "AWS::S3 -- Support for Amazon S3's REST api",
                      '--main',  'README',
                      '--line-numbers', '--inline-source']
