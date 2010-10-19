@@ -76,7 +76,14 @@ module AWS
         # in the section called 'Setting access levels'.
         def create(name, options = {})
           validate_name!(name)
-          put("/#{name}", options).success?
+          # workaround: PUT to create bucket should raise error (as specified in the AWS API docs) when trying to create existing bucket
+          begin
+            find(name)
+            raise AWS::S3::BucketAlreadyExists.new
+          rescue AWS::S3::NoSuchBucket
+            # bucket does not exist, so allow create PUT to go through
+            put("/#{name}", options).success?
+          end
         end
         
         # Fetches the bucket named <tt>name</tt>. 

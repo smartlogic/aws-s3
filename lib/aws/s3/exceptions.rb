@@ -25,6 +25,9 @@ module AWS
     class InternalError < ResponseError
     end
     
+    class NoSuchBucket < ResponseError
+    end
+
     class NoSuchKey < ResponseError
     end
     
@@ -88,6 +91,14 @@ module AWS
         message = "The following metadata names have invalid values: #{invalid_names.join(', ')}. " +
                   "Metadata can not be larger than 2kilobytes."
         super(message)
+      end
+    end
+
+    # Raised if a bucket already exists with the specified name
+    class BucketAlreadyExists < ResponseError
+      def initialize
+        message = "The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again."
+        super(message, {:body => message, :code => 409})
       end
     end
     

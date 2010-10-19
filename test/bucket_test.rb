@@ -13,6 +13,22 @@ class BucketTest < Test::Unit::TestCase
       assert_raises(InvalidBucketName) { validate_name[invalid_name] }
     end
   end
+
+  def test_bucket_create_with_unique_name
+    bucket_name = 'foo'
+    flexmock(Bucket).should_receive(:find).with(bucket_name).and_raise(AWS::S3::NoSuchBucket.new('foobar', {:body => "foobar", :code => 404}))
+    flexmock(Bucket).should_receive(:put).with('/foo', any).and_return(flexmock(:success? => true))
+    assert Bucket.create(bucket_name)
+  end
+
+  # API says that create should error with a BucketAlreadyExists if name already is taken
+  def test_bucket_create_with_existing_name
+    bucket_name = 'foo'
+    flexmock(Bucket).should_receive(:find).with(bucket_name).and_return(flexmock(Bucket))
+    assert_raise AWS::S3::BucketAlreadyExists do
+      Bucket.create(bucket_name)
+    end
+  end
   
   def test_empty_bucket
     mock_connection_for(Bucket, :returns => {:body => Fixtures::Buckets.empty_bucket, :code => 200})
